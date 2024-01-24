@@ -1,0 +1,41 @@
+{
+  "name": "wishesunboxbackend",
+  "description": "- This repository handles the backend of WishesUnbox",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Build-Bridge/WishesUnboxBackend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Build-Bridge/WishesUnboxBackend/issues"
+  },
+  "homepage": "https://github.com/Build-Bridge/WishesUnboxBackend#readme",
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@typescript-eslint/eslint-plugin": "^6.19.1",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.4.0",
+    "eslint": "^8.56.0",
+    "eslint-config-standard-with-typescript": "^43.0.1",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-n": "^16.6.2",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-react": "^7.33.2",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.11.6",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.1.0",
+    "ts-node": "^10.9.2"
+  }
+}
