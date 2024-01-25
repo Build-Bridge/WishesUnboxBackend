@@ -1,6 +1,8 @@
 import mongoose from 'mongoose'
 import bcrypt from 'bcrypt'
 import validator from 'validator'
+import jwt from 'jsonwebtoken'
+import type IUser from '../interfaces/userInterface'
 
 const userSchema = new mongoose.Schema({
   firstName: {
@@ -32,7 +34,7 @@ const userSchema = new mongoose.Schema({
     trim: true,
     minlength: 3,
     maxlength: 50,
-    match: /^[a-z0-9_-#$]+$/,
+    match: /^[a-z0-9_\-#$]+$/,
     validate: {
       validator: (username: string) => !username.includes(' '),
       message: 'Username cannot contain spaces'
@@ -58,5 +60,18 @@ userSchema.pre('save', async function (next) {
   next()
 })
 
-const User = mongoose.model('User', userSchema)
+// validates inserted password against hashed password
+userSchema.methods.validatePassword = async function (insertedPassword: string) {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+  return await bcrypt.compare(insertedPassword, this.password)
+}
+
+userSchema.methods.generateAuthToken = function () {
+  // Generate an auth token for the user
+  const payload = { sub: this._id, username: this.userName }
+  const token = jwt.sign(payload, process.env.JWT_SECRET ?? 'secret', { expiresIn: process.env.JWT_EXPIRE ?? '1h' })
+  return token
+}
+
+const User = mongoose.model<IUser>('User', userSchema)
 export default User
