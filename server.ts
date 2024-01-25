@@ -1,7 +1,10 @@
 import dotenv from 'dotenv'
-import app from './app'
+import app from './src/app'
+import connectDB from './src/config/db'
 
 dotenv.config({ path: './config/.env' })
+
+connectDB()
 
 const PORT = process.env.PORT ?? 3000
 const server = app.listen(PORT, () => {
