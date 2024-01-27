@@ -43,21 +43,20 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true,
     trim: true,
     minlength: 8,
     maxlength: 1024,
     select: false
   },
-  dateOfBirth: { type: Date, required: true },
+  dateOfBirth: { type: Date },
   resetPasswordToken: String,
   resetPasswordExpire: Date
 },
 { timestamps: true })
 
-userSchema.pre('save', async function (next) {
-  if (this.isModified('password')) {
-    // Hash the password before saving the user model
+// hash password before saving to database
+userSchema.pre('save', async function (this: IUser, next) {
+  if (this.isModified('password') && this.password !== undefined) {
     this.password = await bcrypt.hash(this.password, 8)
   }
   next()
@@ -65,8 +64,7 @@ userSchema.pre('save', async function (next) {
 
 // validates inserted password against hashed password
 userSchema.methods.validatePassword = async function (insertedPassword: string) {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-  return await bcrypt.compare(insertedPassword, this.password)
+  return await bcrypt.compare(insertedPassword, this.password || '')
 }
 
 userSchema.methods.generateAuthToken = function () {
