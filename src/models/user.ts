@@ -2,6 +2,7 @@ import mongoose from 'mongoose'
 import bcrypt from 'bcrypt'
 import validator from 'validator'
 import jwt from 'jsonwebtoken'
+import crypto from 'crypto'
 import type IUser from '../interfaces/userInterface'
 
 const userSchema = new mongoose.Schema({
@@ -48,7 +49,9 @@ const userSchema = new mongoose.Schema({
     maxlength: 1024,
     select: false
   },
-  dateOfBirth: { type: Date, required: true }
+  dateOfBirth: { type: Date, required: true },
+  resetPasswordToken: String,
+  resetPasswordExpire: Date
 },
 { timestamps: true })
 
@@ -71,6 +74,18 @@ userSchema.methods.generateAuthToken = function () {
   const payload = { sub: this._id, username: this.userName }
   const token = jwt.sign(payload, process.env.JWT_SECRET ?? 'secret', { expiresIn: process.env.JWT_EXPIRE ?? '1h' })
   return token
+}
+
+// generates password reset token
+userSchema.methods.getResetPasswordToken = function () {
+  // generate the reset token
+  const resetToken = crypto.randomBytes(64).toString('hex')
+
+  // hassh and save this token to the resetPasswordToken field
+  this.resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex')
+  this.resetPasswordExpire = Date.now() + 30 * 60 * 1000 // 30 minutes
+
+  return resetToken
 }
 
 const User = mongoose.model<IUser>('User', userSchema)

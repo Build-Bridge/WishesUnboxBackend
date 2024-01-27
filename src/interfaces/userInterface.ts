@@ -7,6 +7,9 @@ export default interface IUser extends Document {
   userName?: string
   password?: string
   dateOfBirth?: Date
+  resetPasswordToken?: string
+  resetPasswordExpire?: Date
   generateAuthToken: () => string
   validatePassword: (password: string) => boolean
+  getResetPasswordToken: () => string
 }

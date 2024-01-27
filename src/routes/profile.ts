@@ -11,11 +11,11 @@ router.get('/user/me', isAuthenticated, getUserProfile)
 // get user by id
 router.get('/user/id/:id', isAuthenticated, getUserById)
 
-// get user by username
-router.get('/user/:username', isAuthenticated, getUserByUserName)
-
 // update user profile
 router.put('/user/id/:id', isAuthenticated, updateUserProfile)
+
+// get user by username
+router.get('/user/:username', isAuthenticated, getUserByUserName)
 
 // update user password
 router.put('/user/password/update', isAuthenticated, updatePassword)

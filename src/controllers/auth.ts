@@ -3,6 +3,7 @@ import type IUser from '../interfaces/userInterface'
 import asyncErrors from '../middlewares/asyncError'
 import ErrorHandler from '../utils/errorHandler'
 import sendToken from '../utils/sendToken'
+import sendEmail from '../utils/mailer'
 
 // basic user signup
 export const signup = asyncErrors(async (req, res, next) => {
@@ -49,5 +50,66 @@ export const login = asyncErrors(async (req, res, next) => {
     return
   }
 
+  sendToken(user, 200, res)
+})
+
+// forgot password
+export const forgotPassword = asyncErrors(async (req, res, next) => {
+  const user = await User.findOne({ email: req.body.email })
+
+  // check if user exists
+  if (user === null) { next(new ErrorHandler('User not found', 404)); return }
+
+  // get reset token
+  const resetToken = user.getResetPasswordToken()
+  await user.save({ validateBeforeSave: false })
+
+  // create reset url
+  const resetUrl = `${req.protocol}://${req.get('host')}/resetpassword/${resetToken}`
+  const message: string = `Your password reset token is as follows:\n\n${resetUrl}\n\nIf you have not requested this email, please ignore it.`
+
+  // send email
+  try {
+    await sendEmail({
+      email: user.email,
+      subject: 'Wishes Unbox - Password Recovery',
+      message
+    })
+    res.status(200).json({
+      success: true,
+      message: `Email sent to ${user.email}`
+    })
+  } catch (err: Error | any) {
+    user.resetPasswordToken = undefined
+    user.resetPasswordExpire = undefined
+
+    await user.save({ validateBeforeSave: false })
+    next(new ErrorHandler(err.message as string, 500))
+  }
+})
+
+// reset password
+export const resetPassword = asyncErrors(async (req, res, next) => {
+  const { password, confirmPassword } = req.body
+
+  const user = await User.findOne({
+    resetPasswordToken: req.params.resettoken,
+    resetPasswordExpire: { $gt: Date.now() }
+  })
+
+  if (user === null) {
+    next(new ErrorHandler('Invalid reset token', 400)); return
+  }
+
+  if (password !== confirmPassword) {
+    next(new ErrorHandler('Password does not match', 400)); return
+  }
+
+  // setup new password
+  user.password = password
+  user.resetPasswordToken = undefined
+  user.resetPasswordExpire = undefined
+
+  await user.save()
   sendToken(user, 200, res)
 })
