@@ -4,16 +4,19 @@ import asyncErrors from '../middlewares/asyncError'
 import ErrorHandler from '../utils/errorHandler'
 import sendToken from '../utils/sendToken'
 import sendEmail from '../utils/mailer'
+import crypto from 'crypto'
 
 // basic user signup
 export const signup = asyncErrors(async (req, res, next) => {
-  const { firstName, lastName, email, userName, password, dateOfBirth } = req.body
+  const { firstName, lastName, email, userName, password } = req.body
+  let { dateOfBirth } = req.body
   try {
     const oldUser: IUser | null = await User.findOne({ email }).lean()
     if (oldUser !== null) {
       next(new ErrorHandler('User already exists', 400))
       return
     }
+    dateOfBirth = new Date(dateOfBirth as string)
 
     const user: IUser = new User({ firstName, lastName, email, userName, password, dateOfBirth })
 
@@ -67,7 +70,6 @@ export const forgotPassword = asyncErrors(async (req, res, next) => {
   // create reset url
   const resetUrl = `${req.protocol}://${req.get('host')}/resetpassword/${resetToken}`
   const message: string = `Your password reset token is as follows:\n\n${resetUrl}\n\nIf you have not requested this email, please ignore it.`
-
   // send email
   try {
     await sendEmail({
@@ -92,8 +94,9 @@ export const forgotPassword = asyncErrors(async (req, res, next) => {
 export const resetPassword = asyncErrors(async (req, res, next) => {
   const { password, confirmPassword } = req.body
 
+  const resetPasswordToken = crypto.createHash('sha256').update(req.params.token).digest('hex')
   const user = await User.findOne({
-    resetPasswordToken: req.params.resettoken,
+    resetPasswordToken,
     resetPasswordExpire: { $gt: Date.now() }
   })
 

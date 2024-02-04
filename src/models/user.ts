@@ -64,7 +64,7 @@ userSchema.pre('save', async function (this: IUser, next) {
 
 // validates inserted password against hashed password
 userSchema.methods.validatePassword = async function (insertedPassword: string) {
-  return await bcrypt.compare(insertedPassword, this.password || '')
+  return await bcrypt.compare(insertedPassword, this.password as string)
 }
 
 userSchema.methods.generateAuthToken = function () {

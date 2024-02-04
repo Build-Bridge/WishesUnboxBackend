@@ -12,11 +12,13 @@ const sendEmail = async (options: any): Promise<void> => {
 
   // 2. Define the email options.
   const mailOptions = {
-    from: `${process.env.SMTP_FROM_NAME} <${process.env.SMTP_FROM_MAIL}>`,
+    from: '"Wishes Unbox"<th3buildbridge@gmail.com>',
     to: options.email,
     subject: options.subject,
     text: options.message
   }
+  console.log(process.env.SMTP_FROM_NAME)
+  console.log(process.env.SMTP_FROM_MAIL)
 
   // 3. Send the email.
   await transport.sendMail(mailOptions)

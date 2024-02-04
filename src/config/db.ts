@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 
 const connectDB = (): void => {
-  mongoose.connect(process.env.MONGODB_URI ?? 'mongodb://localhost:27017/wishes_unbox')
+  mongoose.connect(process.env.MONGODB_URI ?? '')
     .then((conBool) => {
       console.log(`MongoDB Connected: ${conBool.connection.host}`)
     })
