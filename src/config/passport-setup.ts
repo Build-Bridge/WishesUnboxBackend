@@ -62,7 +62,7 @@ passport.use(
   new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID || '',
     clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
-    callbackURL: '/google/redirect'
+    callbackURL: process.env.GOOGLE_REDIRECT_URI || ''
   }, async (_accessToken: string, _refreshToken: string, profile: any, done) => {
     const email = (profile.emails && profile.emails[0]?.value) || ''
     try {
