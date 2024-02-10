@@ -249,7 +249,8 @@ Retrieves a user's profile information by their user ID.
 
 #### Headers
 
-- `Authorization` : Cookies
+- `Authorization` : Cookies 
+
 #### Path Parameters
 
 - `id` (string): The user ID.

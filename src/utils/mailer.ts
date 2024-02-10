@@ -17,8 +17,6 @@ const sendEmail = async (options: any): Promise<void> => {
     subject: options.subject,
     text: options.message
   }
-  console.log(process.env.SMTP_FROM_NAME)
-  console.log(process.env.SMTP_FROM_MAIL)
 
   // 3. Send the email.
   await transport.sendMail(mailOptions)

@@ -4,7 +4,6 @@ import asyncErrors from '../middlewares/asyncError'
 import ErrorHandler from '../utils/errorHandler'
 import sendToken from '../utils/sendToken'
 import sendEmail from '../utils/mailer'
-import crypto from 'crypto'
 
 // basic user signup
 export const signup = asyncErrors(async (req, res, next) => {
@@ -94,7 +93,7 @@ export const forgotPassword = asyncErrors(async (req, res, next) => {
 export const resetPassword = asyncErrors(async (req, res, next) => {
   const { password, confirmPassword } = req.body
 
-  const resetPasswordToken = crypto.createHash('sha256').update(req.params.token).digest('hex')
+  const resetPasswordToken = req.params.resettoken
   const user = await User.findOne({
     resetPasswordToken,
     resetPasswordExpire: { $gt: Date.now() }
