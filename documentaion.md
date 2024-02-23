@@ -339,4 +339,112 @@ Updates a user's password.
 - `200 OK`: On successful password update. Returns a success message.
 - `400 Bad Request`: If the new password is the same as the old one.
 - `401 Unauthorized`: If the old password is incorrect.
-- `404 Not Found`: If the user is not found.
+- `404 Not Found`: If the user is not found.  
+
+
+## Card Management API Documentation
+
+This section provides an overview of the card management endpoints for the Wishes Unbox application.
+
+### Table of Contents
+
+- [Card Management](#card-management)
+ - [Create Card](#create-card)
+ - [Get Card by ID](#get-card-by-id)
+ - [Update Card](#update-card)
+ - [Delete Card](#delete-card)
+
+### Card Management
+
+### Create Card
+``` http
+POST /card/create
+```
+#### Description
+
+Creates a new card.
+
+#### Request Body Parameters
+
+- `receiver` (string): The receiver's name.
+- `email` (string): The receiver's email address.
+- `wish` (string): The wish message.
+- `occasion` (string): The occasion for the card.
+
+#### Example Request
+```json
+{
+ "receiver": "Jane Doe",
+"email": "jane.doe@example.com",
+"wish": "Happy Birthday!",
+"occasion": "Birthday"
+}
+```
+
+#### Response
+
+- `201 Created`: On successful creation of the card. Returns the created card object.
+
+
+### Get Card by ID
+```http
+GET /card/:id
+```
+
+#### Description
+
+Retrieves a card's details by its ID.
+
+#### Path Parameters
+
+- `id` (string): The card's ID.
+
+#### Response
+
+- `200 OK`: On successful retrieval of the card. Returns the card object.
+- `404 Not Found`: If the card with the given ID```
+
+### Update Card
+
+```http
+PUT /card/:id
+```
+
+#### Description
+
+Updates a card's details by its ID.
+
+#### Path Parameters
+
+- `id` (string): The card's ID.
+
+#### Request Body Parameters
+
+- `receiver` (string, optional): The new receiver's name.
+- `email` (string, optional): The new receiver's email address.
+- `wish` (string, optional): The new wish message.
+- `occasion` (string, optional): The new occasion for the card.
+
+#### Response
+
+- `200 OK`: On successful update of the card. Returns the updated card object.
+- `404 Not Found`: If the card with the given ID is not found.
+
+### Delete Card
+
+```http
+DELETE /card/:id
+```
+
+#### Description
+
+Deletes a card by its ID.
+
+#### Path Parameters
+
+- `id` (string): The card's ID.
+
+#### Response
+
+- `200 OK`: On successful deletion of the card. Returns a success message.
+- `404 Not Found`: If the card with the given ID is not found.

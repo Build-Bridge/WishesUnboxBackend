@@ -6,6 +6,7 @@ import passport from './config/passport-setup'
 import session from 'express-session'
 import authRoutes from './routes/auth'
 import profileRoutes from './routes/profile'
+import cardRoutes from './routes/card'
 
 const app = express()
 
@@ -40,6 +41,7 @@ app.get('/', (req: Request, res: Response) => {
 
 app.use(authRoutes)
 app.use(profileRoutes)
+app.use(cardRoutes)
 
 // Error handler
 app.use(errorHandler)
