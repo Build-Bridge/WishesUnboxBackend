@@ -75,13 +75,15 @@ export const scheduleCard = asyncError(async (req: any, res: any, next: any): Pr
 
   // get send date from user
   const { date, time } = req.body
-  const sendAt = new Date(`${date}T${time}Z`)
+  const dateTimeString = `${date}T${time}`
+  const sendAt = new Date(dateTimeString)
 
   // prevent the page from being unresponsive till the end of the scheduled time
   res.status(200).json({ message: 'Email scheduling set up successfully.' })
 
   // create the schedule job
-  nodeSchedule.scheduleJob(sendAt, async function () {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const job = nodeSchedule.scheduleJob(sendAt, async function () {
     try {
       await sendCard(card, cardLink)
       console.log('Scheduled email sent successfully')
