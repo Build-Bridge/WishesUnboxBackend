@@ -5,5 +5,5 @@ export default interface ICard extends Document {
   sender: string
   email: string
   wish: string
-  occassion: string
+  occasion: string
 }
