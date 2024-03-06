@@ -60,7 +60,8 @@ export const shareCard = asyncError(async (req: any, res: any, next: any): Promi
   const cardLink = `${req.protocol}://${req.get('host')}/card/${card._id}`
 
   try {
-    await sendCard(card, cardLink, res)
+    await sendCard(card, cardLink)
+    res.status(200).json({ success: true, message: 'Email sent successfully' })
   } catch (err: Error | any) {
     return next(new ErrorHandler('Fail to send mail', 500))
   }
@@ -76,12 +77,16 @@ export const scheduleCard = asyncError(async (req: any, res: any, next: any): Pr
   const { date, time } = req.body
   const sendAt = new Date(`${date}T${time}Z`)
 
+  // prevent the page from being unresponsive till the end of the scheduled time
+  res.status(200).json({ message: 'Email scheduling set up successfully.' })
+
   // create the schedule job
   nodeSchedule.scheduleJob(sendAt, async function () {
     try {
-      await sendCard(card, cardLink, res)
+      await sendCard(card, cardLink)
+      console.log('Scheduled email sent successfully')
     } catch (err) {
-      res.status(500).json({ success: false, message: 'Fail to send scheduled mail' })
+      console.error('Fail to send scheduled mail', err)
     }
   })
 })

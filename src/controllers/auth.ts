@@ -68,7 +68,7 @@ export const forgotPassword = asyncErrors(async (req, res, next) => {
 
   // create reset url
   const resetUrl = `${req.protocol}://${req.get('host')}/resetpassword/${resetToken}`
-  const message: string = `Your password reset token is as follows:\n\n${resetUrl}\n\nIf you have not requested this email, please ignore it.`
+  const message: string = `Your password reset token is as follows:<br>${resetUrl}.<br>If you have not requested this email, please ignore it.`
   // send email
   try {
     await sendEmail({

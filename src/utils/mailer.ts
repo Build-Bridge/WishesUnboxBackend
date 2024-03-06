@@ -15,7 +15,7 @@ const sendEmail = async (options: any): Promise<void> => {
     from: '"Wishes Unbox"<th3buildbridge@gmail.com>',
     to: options.email,
     subject: options.subject,
-    text: options.message
+    html: `<p> ${options.message} </p>`
   }
 
   // 3. Send the email.
