@@ -1,5 +1,7 @@
-import express, { type Request, type Response } from 'express'
+import express, { type Response } from 'express'
 import cors from 'cors'
+import swaggerUi from 'swagger-ui-express'
+import { swaggerSpec } from './swagger'
 import cookieParser from 'cookie-parser'
 import errorHandler from './middlewares/error'
 import passport from './config/passport-setup'
@@ -35,14 +37,15 @@ app.use(cors({
 }))
 
 // root route
-app.get('/', (req: Request, res: Response) => {
-  res.send('Welcome to Wishes Unbox backend')
+app.get('/', (_, res: Response) => {
+  res.send('Welcome to Wishes Unbox backend. Go to "/api-docs" for documentation')
 })
 
 app.use(authRoutes)
 app.use(profileRoutes)
 app.use(cardRoutes)
 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 // Error handler
 app.use(errorHandler)
 export default app
