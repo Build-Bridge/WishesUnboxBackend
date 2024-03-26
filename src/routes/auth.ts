@@ -12,61 +12,51 @@ const router = express.Router()
 
 /**
  * @swagger
- * path:
- *   /signup:
- *     post:
- *       summary: Basic user signup
- *       description: Signup user with username, email, and password
- *       tags: [Auth]
- *       requestBody:
- *         required: true
+ * /signup:
+ *   post:
+ *     summary: Basic signup for users
+ *     description: Signup user with username and password
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - firstName
+ *               - lastName
+ *               - email
+ *               - userName
+ *               - password
+ *               - dateOfBirth
+ *             properties:
+ *               firstName:
+ *                 type: string
+ *               lastName:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               userName:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *               dateOfBirth:
+ *                 type: string
+ *                 format: date
+ *     responses:
+ *       201:
+ *         description: User created successfully
  *         content:
  *           application/json:
  *             schema:
  *               type: object
- *               required:
- *                 - firstName
- *                 - lastName
- *                 - email
- *                 - userName
- *                 - password
- *                 - dateOfBirth
  *               properties:
- *                 firstName:
+ *                 message:
  *                   type: string
- *                   description: User's first name
- *                 lastName:
+ *                 token:
  *                   type: string
- *                   description: User's last name
- *                 email:
- *                   type: string
- *                   format: email
- *                   description: User's email address
- *                 userName:
- *                   type: string
- *                   description: Username for login
- *                 password:
- *                   type: string
- *                   description: User's password
- *                 dateOfBirth:
- *                   type: string
- *                   format: date
- *                   description: User's date of birth
- *       responses:
- *         201:
- *           description: User created successfully
- *           content:
- *             application/json:
- *               schema:
- *                 type: object
- *                 properties:
- *                   token:
- *                     type: string
- *                     description: JWT token for authentication
- *         400:
- *           description: User already exists
- *         500:
- *           description: Internal server error
+ *       400:
+ *         description: User already exists
  */
 router.post('/signup', signup)
 

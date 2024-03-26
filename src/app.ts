@@ -46,6 +46,10 @@ app.use(profileRoutes)
 app.use(cardRoutes)
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
+app.get('/api-docs.json', (req, res) => {
+  res.setHeader('Content-Type', 'application/json')
+  res.send(swaggerSpec)
+})
 // Error handler
 app.use(errorHandler)
 export default app
