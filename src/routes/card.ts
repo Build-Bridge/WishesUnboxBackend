@@ -188,7 +188,7 @@ router.post('/card/:id/share', isAuthenticated, shareCard)
  * /card/{id}/schedule:
  *   post:
  *     summary: Schedule card sharing
- *     description: Schedule a card to be shared via email at a specific time
+ *     description: Schedule a card to be shared via email at a specific time. Timezone must be specified
  *     parameters:
  *       - in: path
  *         name: id
